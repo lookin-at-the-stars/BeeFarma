@@ -1,2 +1,0 @@
-# BeeFarma
-BeeFarma
