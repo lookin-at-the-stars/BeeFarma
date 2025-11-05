@@ -9,13 +9,13 @@ import org.mapstruct.MappingTarget;
 import java.util.List;
 import java.util.UUID;
 
-@Mapper(componentModel = "spring", imports = UUID.class)
+@Mapper(componentModel = "spring")
 public interface ProdutoMapper {
     
-    @Mapping(target = "id", expression = "java(entity.getId() != null ? entity.getId().toString() : null)")
+    @Mapping(target = "id", source = "id")
     ProdutoDTO toDto(Produto entity);
     
-    @Mapping(target = "id", expression = "java(dto.getId() != null ? UUID.fromString(dto.getId()) : null)")
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "criadoEm", ignore = true)
     Produto toEntity(ProdutoDTO dto);
     
@@ -24,4 +24,12 @@ public interface ProdutoMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "criadoEm", ignore = true)
     void updateEntityFromDto(ProdutoDTO dto, @MappingTarget Produto entity);
+
+    default String uuidToString(UUID id) {
+        return id == null ? null : id.toString();
+    }
+
+    default UUID stringToUuid(String id) {
+        return id == null ? null : UUID.fromString(id);
+    }
 }

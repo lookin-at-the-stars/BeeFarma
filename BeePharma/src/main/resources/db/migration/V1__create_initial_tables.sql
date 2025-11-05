@@ -1,6 +1,6 @@
 -- Criação das tabelas iniciais
 CREATE TABLE produtos (
-    id CHAR(36) PRIMARY KEY,
+    id BINARY(16) PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     descricao VARCHAR(1000),
     codigo_anvisa VARCHAR(255) UNIQUE,
@@ -10,7 +10,7 @@ CREATE TABLE produtos (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE usuarios (
-    id CHAR(36) PRIMARY KEY,
+    id BINARY(16) PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
@@ -18,8 +18,8 @@ CREATE TABLE usuarios (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE lotes (
-    id CHAR(36) PRIMARY KEY,
-    produto_id CHAR(36) NOT NULL,
+    id BINARY(16) PRIMARY KEY,
+    produto_id BINARY(16) NOT NULL,
     numero_lote VARCHAR(255) NOT NULL UNIQUE,
     data_fabricacao DATE NOT NULL,
     data_validade DATE NOT NULL,
@@ -29,9 +29,9 @@ CREATE TABLE lotes (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE ordens_producao (
-    id CHAR(36) PRIMARY KEY,
+    id BINARY(16) PRIMARY KEY,
     numero_op VARCHAR(255) NOT NULL UNIQUE,
-    produto_id CHAR(36) NOT NULL,
+    produto_id BINARY(16) NOT NULL,
     quantidade_planejada DECIMAL(19,4) NOT NULL,
     data_inicio DATE,
     data_fim_prevista DATE,
@@ -40,9 +40,9 @@ CREATE TABLE ordens_producao (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE inventario_itens (
-    id CHAR(36) PRIMARY KEY,
-    produto_id CHAR(36) NOT NULL,
-    lote_id CHAR(36) NOT NULL,
+    id BINARY(16) PRIMARY KEY,
+    produto_id BINARY(16) NOT NULL,
+    lote_id BINARY(16) NOT NULL,
     quantidade DECIMAL(19,4) NOT NULL,
     localizacao VARCHAR(255) NOT NULL,
     FOREIGN KEY (produto_id) REFERENCES produtos(id),
@@ -50,13 +50,13 @@ CREATE TABLE inventario_itens (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE movimentos_estoque (
-    id CHAR(36) PRIMARY KEY,
+    id BINARY(16) PRIMARY KEY,
     tipo VARCHAR(50) NOT NULL,
-    produto_id CHAR(36) NOT NULL,
-    lote_id CHAR(36) NOT NULL,
+    produto_id BINARY(16) NOT NULL,
+    lote_id BINARY(16) NOT NULL,
     quantidade DECIMAL(19,4) NOT NULL,
     data_hora DATETIME NOT NULL,
-    responsavel_id CHAR(36) NOT NULL,
+    responsavel_id BINARY(16) NOT NULL,
     FOREIGN KEY (produto_id) REFERENCES produtos(id),
     FOREIGN KEY (lote_id) REFERENCES lotes(id),
     FOREIGN KEY (responsavel_id) REFERENCES usuarios(id)
