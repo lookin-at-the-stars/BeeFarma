@@ -1,0 +1,27 @@
+services:
+  mariadb:
+    image: mariadb:10.11
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: beepharma
+      MARIADB_USER: beepharma
+      MARIADB_PASSWORD: beepharma
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mariadb
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/beepharma
+      SPRING_DATASOURCE_USERNAME: beepharma
+      SPRING_DATASOURCE_PASSWORD: beepharma
+
+volumes:
+  mariadb_data:
