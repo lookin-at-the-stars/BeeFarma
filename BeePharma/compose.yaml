@@ -11,13 +11,20 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
     command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    healthcheck:
+      test: ["CMD", "mariadb", "-h", "localhost", "-u", "root", "--password=root", "-e", "SELECT 1;"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
 
   app:
     build: .
     ports:
       - "8080:8080"
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/beepharma
       SPRING_DATASOURCE_USERNAME: beepharma

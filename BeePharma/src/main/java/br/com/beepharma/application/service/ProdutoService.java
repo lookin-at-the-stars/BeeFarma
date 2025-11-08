@@ -26,7 +26,14 @@ public class ProdutoService {
     
     @Transactional(readOnly = true)
     public ProdutoDTO buscarPorId(String id) {
-        return produtoRepository.findById(UUID.fromString(id))
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        UUID uuid = UUID.fromString(id);
+        if (uuid == null) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+        return produtoRepository.findById(uuid)
                 .map(produtoMapper::toDto)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
     }
@@ -44,7 +51,14 @@ public class ProdutoService {
     
     @Transactional
     public ProdutoDTO atualizar(String id, ProdutoDTO dto) {
-        Produto produto = produtoRepository.findById(UUID.fromString(id))
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        UUID uuid = UUID.fromString(id);
+        if (uuid == null) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+        Produto produto = produtoRepository.findById(uuid)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
         
         if (dto.getCodigoAnvisa() != null && !dto.getCodigoAnvisa().equals(produto.getCodigoAnvisa()) 
@@ -59,9 +73,16 @@ public class ProdutoService {
     
     @Transactional
     public void excluir(String id) {
-        if (!produtoRepository.existsById(UUID.fromString(id))) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        UUID uuid = UUID.fromString(id);
+        if (uuid == null) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+        if (!produtoRepository.existsById(uuid)) {
             throw new EntityNotFoundException("Produto não encontrado");
         }
-        produtoRepository.deleteById(UUID.fromString(id));
+        produtoRepository.deleteById(uuid);
     }
 }

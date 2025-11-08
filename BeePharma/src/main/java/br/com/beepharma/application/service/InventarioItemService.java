@@ -32,8 +32,15 @@ public class InventarioItemService {
     
     @Transactional(readOnly = true)
     public List<InventarioItemDTO> listarPorProduto(String produtoId) {
+        if (produtoId == null) {
+            throw new IllegalArgumentException("ID do produto não pode ser nulo");
+        }
+        UUID uuid = UUID.fromString(produtoId);
+        if (uuid == null) {
+            throw new IllegalArgumentException("ID do produto inválido");
+        }
         return inventarioItemMapper.toDtoList(
-            inventarioItemRepository.findByProdutoId(UUID.fromString(produtoId))
+            inventarioItemRepository.findByProdutoId(uuid)
         );
     }
     
@@ -46,17 +53,44 @@ public class InventarioItemService {
     
     @Transactional(readOnly = true)
     public InventarioItemDTO buscarPorId(String id) {
-        return inventarioItemRepository.findById(UUID.fromString(id))
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        UUID uuid = UUID.fromString(id);
+        if (uuid == null) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+        return inventarioItemRepository.findById(uuid)
                 .map(inventarioItemMapper::toDto)
                 .orElseThrow(() -> new EntityNotFoundException("Item do inventário não encontrado"));
     }
     
     @Transactional
     public InventarioItemDTO criar(InventarioItemDTO dto) {
-        Produto produto = produtoRepository.findById(UUID.fromString(dto.getProdutoId()))
+        if (dto == null) {
+            throw new IllegalArgumentException("Dados do item não podem ser nulos");
+        }
+        if (dto.getProdutoId() == null) {
+            throw new IllegalArgumentException("ID do produto não pode ser nulo");
+        }
+        if (dto.getLoteId() == null) {
+            throw new IllegalArgumentException("ID do lote não pode ser nulo");
+        }
+
+        UUID produtoUuid = UUID.fromString(dto.getProdutoId());
+        UUID loteUuid = UUID.fromString(dto.getLoteId());
+        
+        if (produtoUuid == null) {
+            throw new IllegalArgumentException("ID do produto inválido");
+        }
+        if (loteUuid == null) {
+            throw new IllegalArgumentException("ID do lote inválido");
+        }
+
+        Produto produto = produtoRepository.findById(produtoUuid)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
         
-        Lote lote = loteRepository.findById(UUID.fromString(dto.getLoteId()))
+        Lote lote = loteRepository.findById(loteUuid)
                 .orElseThrow(() -> new EntityNotFoundException("Lote não encontrado"));
         
         InventarioItem item = inventarioItemMapper.toEntity(dto);
@@ -69,7 +103,14 @@ public class InventarioItemService {
     
     @Transactional
     public InventarioItemDTO atualizar(String id, InventarioItemDTO dto) {
-        InventarioItem item = inventarioItemRepository.findById(UUID.fromString(id))
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        UUID uuid = UUID.fromString(id);
+        if (uuid == null) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+        InventarioItem item = inventarioItemRepository.findById(uuid)
                 .orElseThrow(() -> new EntityNotFoundException("Item do inventário não encontrado"));
         
         inventarioItemMapper.updateEntityFromDto(dto, item);
@@ -79,9 +120,16 @@ public class InventarioItemService {
     
     @Transactional
     public void excluir(String id) {
-        if (!inventarioItemRepository.existsById(UUID.fromString(id))) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        UUID uuid = UUID.fromString(id);
+        if (uuid == null) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+        if (!inventarioItemRepository.existsById(uuid)) {
             throw new EntityNotFoundException("Item do inventário não encontrado");
         }
-        inventarioItemRepository.deleteById(UUID.fromString(id));
+        inventarioItemRepository.deleteById(uuid);
     }
 }

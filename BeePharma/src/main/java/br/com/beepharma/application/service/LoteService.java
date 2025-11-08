@@ -36,7 +36,14 @@ public class LoteService {
     
     @Transactional(readOnly = true)
     public LoteDTO buscarPorId(String id) {
-        return loteRepository.findById(UUID.fromString(id))
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        UUID uuid = UUID.fromString(id);
+        if (uuid == null) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+        return loteRepository.findById(uuid)
                 .map(loteMapper::toDto)
                 .orElseThrow(() -> new EntityNotFoundException("Lote não encontrado"));
     }
@@ -45,7 +52,14 @@ public class LoteService {
     public LoteDTO criar(LoteDTO dto) {
         validarLote(dto);
         
-        Produto produto = produtoRepository.findById(UUID.fromString(dto.getProdutoId()))
+        if (dto.getProdutoId() == null) {
+            throw new IllegalArgumentException("ID do produto não pode ser nulo");
+        }
+        UUID produtoUuid = UUID.fromString(dto.getProdutoId());
+        if (produtoUuid == null) {
+            throw new IllegalArgumentException("ID do produto inválido");
+        }
+        Produto produto = produtoRepository.findById(produtoUuid)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
         
         if (loteRepository.existsByNumeroLote(dto.getNumeroLote())) {
@@ -64,7 +78,14 @@ public class LoteService {
     public LoteDTO atualizar(String id, LoteDTO dto) {
         validarLote(dto);
         
-        Lote lote = loteRepository.findById(UUID.fromString(id))
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        UUID uuid = UUID.fromString(id);
+        if (uuid == null) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+        Lote lote = loteRepository.findById(uuid)
                 .orElseThrow(() -> new EntityNotFoundException("Lote não encontrado"));
         
         if (!dto.getNumeroLote().equals(lote.getNumeroLote()) 
@@ -79,7 +100,14 @@ public class LoteService {
     
     @Transactional
     public LoteDTO atualizarStatus(String id, LoteStatus novoStatus) {
-        Lote lote = loteRepository.findById(UUID.fromString(id))
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        UUID uuid = UUID.fromString(id);
+        if (uuid == null) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+        Lote lote = loteRepository.findById(uuid)
                 .orElseThrow(() -> new EntityNotFoundException("Lote não encontrado"));
         
         lote.setStatus(novoStatus);

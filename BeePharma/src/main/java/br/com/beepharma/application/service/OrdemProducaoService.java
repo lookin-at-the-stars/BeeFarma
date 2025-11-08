@@ -35,7 +35,14 @@ public class OrdemProducaoService {
     
     @Transactional(readOnly = true)
     public OrdemProducaoDTO buscarPorId(String id) {
-        return ordemProducaoRepository.findById(UUID.fromString(id))
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        UUID uuid = UUID.fromString(id);
+        if (uuid == null) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+        return ordemProducaoRepository.findById(uuid)
                 .map(ordemProducaoMapper::toDto)
                 .orElseThrow(() -> new EntityNotFoundException("Ordem de Produção não encontrada"));
     }
@@ -46,7 +53,15 @@ public class OrdemProducaoService {
             throw new IllegalArgumentException("Número de OP já cadastrado");
         }
         
-        Produto produto = produtoRepository.findById(UUID.fromString(dto.getProdutoId()))
+        if (dto.getProdutoId() == null) {
+            throw new IllegalArgumentException("ID do produto não pode ser nulo");
+        }
+        UUID produtoUuid = UUID.fromString(dto.getProdutoId());
+        if (produtoUuid == null) {
+            throw new IllegalArgumentException("ID do produto inválido");
+        }
+        
+        Produto produto = produtoRepository.findById(produtoUuid)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
         
         OrdemProducao op = ordemProducaoMapper.toEntity(dto);
@@ -59,7 +74,14 @@ public class OrdemProducaoService {
     
     @Transactional
     public OrdemProducaoDTO atualizar(String id, OrdemProducaoDTO dto) {
-        OrdemProducao op = ordemProducaoRepository.findById(UUID.fromString(id))
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        UUID uuid = UUID.fromString(id);
+        if (uuid == null) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+        OrdemProducao op = ordemProducaoRepository.findById(uuid)
                 .orElseThrow(() -> new EntityNotFoundException("Ordem de Produção não encontrada"));
         
         if (!dto.getNumeroOP().equals(op.getNumeroOP()) 
@@ -74,7 +96,14 @@ public class OrdemProducaoService {
     
     @Transactional
     public OrdemProducaoDTO atualizarStatus(String id, OPStatus novoStatus) {
-        OrdemProducao op = ordemProducaoRepository.findById(UUID.fromString(id))
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo");
+        }
+        UUID uuid = UUID.fromString(id);
+        if (uuid == null) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+        OrdemProducao op = ordemProducaoRepository.findById(uuid)
                 .orElseThrow(() -> new EntityNotFoundException("Ordem de Produção não encontrada"));
         
         op.setStatus(novoStatus);
