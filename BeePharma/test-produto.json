@@ -1,0 +1,15 @@
+{
+  "nome": "Paracetamol 500mg",
+  "descricao": "Analgésico e antitérmico",
+  "codigoAnvisa": "1234567890123",
+  "fabricante": "Laboratório Exemplo",
+  "principioAtivo": "Paracetamol",
+  "concentracao": "500mg",
+  "formaFarmaceutica": "Comprimido",
+  "unidadeMedida": "COMPRIMIDO",
+  "estoque": 1000,
+  "estoqueMinimo": 100,
+  "estoqueMaximo": 5000,
+  "preco": 15.50,
+  "ativo": true
+}

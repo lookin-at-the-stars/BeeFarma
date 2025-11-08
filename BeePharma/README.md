@@ -1,14 +1,43 @@
-# BeePharma - Sistema de Gestão Farmacêutica
+# BeePharma - Sistema de Gestão Farmacêutica 🐝
 
 ## 📋 Visão Geral
-BeePharma é um sistema de gestão para indústrias farmacêuticas, focado no controle de estoque, lotes e produção de medicamentos. O sistema foi desenvolvido pensando na segurança e rastreabilidade que o setor farmacêutico exige.
+BeePharma é um sistema completo de gestão para indústrias farmacêuticas, focado no controle de estoque, lotes e produção de medicamentos. O sistema foi desenvolvido pensando na segurança e rastreabilidade que o setor farmacêutico exige.
+
+## � Como Executar
+
+### Pré-requisitos
+- Docker
+- Docker Compose
+
+### Iniciar o Sistema Completo
+
+```bash
+# No diretório do projeto
+docker compose up --build
+```
+
+Isso irá iniciar 3 serviços:
+- **MariaDB** na porta 3306
+- **Backend (Spring Boot)** na porta 8080
+- **Frontend (Nginx)** na porta 80
+
+### Acessar o Sistema
+
+- **🌐 Frontend**: http://localhost
+- **🔧 API Backend**: http://localhost:8080/api
+- **📚 Swagger UI**: http://localhost:8080/api/swagger-ui.html
 
 ## 🛠 Tecnologias Utilizadas
 
-### Java e Spring Boot
+### Backend
 - **Java 17**: A linguagem de programação principal, escolhida por sua robustez e forte tipagem
 - **Spring Boot 3.1.5**: Framework que facilita a criação de aplicações Java, oferecendo diversos recursos prontos para uso
   - Imagine o Spring Boot como um "kit de ferramentas" que já vem com tudo pronto para construir uma casa
+
+### Frontend
+- **HTML5/CSS3/JavaScript**: Interface moderna e responsiva
+- **Nginx**: Servidor web para servir a aplicação frontend
+- **Tema Abelha**: Design em amarelo/dourado suave inspirado em abelhas 🐝
 
 ### Banco de Dados
 - **MariaDB**: Banco de dados relacional (parecido com MySQL) onde guardamos todas as informações

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeePharma - Sistema de Gestão Farmacêutica</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <span class="bee-icon">🐝</span>
+                <h1>BeePharma</h1>
+            </div>
+            <nav class="nav">
+                <a href="#produtos" class="nav-link active" data-section="produtos">Produtos</a>
+                <a href="#lotes" class="nav-link" data-section="lotes">Lotes</a>
+                <a href="#estoque" class="nav-link" data-section="estoque">Estoque</a>
+                <a href="#inventario" class="nav-link" data-section="inventario">Inventário</a>
+                <a href="#producao" class="nav-link" data-section="producao">Produção</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Dashboard Overview -->
+            <section id="dashboard" class="dashboard">
+                <h2>Dashboard <span class="honeycomb">🍯</span></h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-info">
+                            <h3 id="total-produtos">0</h3>
+                            <p>Produtos Cadastrados</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏷️</div>
+                        <div class="stat-info">
+                            <h3 id="total-lotes">0</h3>
+                            <p>Lotes Ativos</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-info">
+                            <h3 id="total-movimentos">0</h3>
+                            <p>Movimentações</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚙️</div>
+                        <div class="stat-info">
+                            <h3 id="total-ordens">0</h3>
+                            <p>Ordens de Produção</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Produtos Section -->
+            <section id="produtos" class="section active">
+                <div class="section-header">
+                    <h2>Produtos 📦</h2>
+                    <button class="btn btn-primary" onclick="showModal('modalProduto')">
+                        <span>➕</span> Novo Produto
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Código ANVISA</th>
+                                <th>Classe Terapêutica</th>
+                                <th>Unidade</th>
+                                <th>Descrição</th>
+                                <th>Criado em</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="produtos-table-body">
+                            <tr>
+                                <td colspan="7" class="loading">
+                                    <div class="spinner"></div>
+                                    Carregando produtos...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Lotes Section -->
+            <section id="lotes" class="section">
+                <div class="section-header">
+                    <h2>Lotes 🏷️</h2>
+                    <button class="btn btn-primary" onclick="showModal('modalLote')">
+                        <span>➕</span> Novo Lote
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Número do Lote</th>
+                                <th>Produto</th>
+                                <th>Quantidade</th>
+                                <th>Validade</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lotes-table-body">
+                            <tr>
+                                <td colspan="6" class="loading">
+                                    <div class="spinner"></div>
+                                    Carregando lotes...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Estoque Section -->
+            <section id="estoque" class="section">
+                <div class="section-header">
+                    <h2>Movimentos de Estoque 📊</h2>
+                    <button class="btn btn-primary" onclick="showModal('modalMovimento')">
+                        <span>➕</span> Registrar Movimento
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Data/Hora</th>
+                                <th>Tipo</th>
+                                <th>Produto</th>
+                                <th>Quantidade</th>
+                                <th>Motivo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="estoque-table-body">
+                            <tr>
+                                <td colspan="5" class="loading">
+                                    <div class="spinner"></div>
+                                    Carregando movimentos...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Inventário Section -->
+            <section id="inventario" class="section">
+                <div class="section-header">
+                    <h2>Inventário 📋</h2>
+                    <button class="btn btn-primary" onclick="showModal('modalInventario')">
+                        <span>➕</span> Novo Item
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Localização</th>
+                                <th>Qtd. Física</th>
+                                <th>Qtd. Sistema</th>
+                                <th>Diferença</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventario-table-body">
+                            <tr>
+                                <td colspan="6" class="loading">
+                                    <div class="spinner"></div>
+                                    Carregando inventário...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Produção Section -->
+            <section id="producao" class="section">
+                <div class="section-header">
+                    <h2>Ordens de Produção ⚙️</h2>
+                    <button class="btn btn-primary" onclick="showModal('modalOrdemProducao')">
+                        <span>➕</span> Nova Ordem
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Produto</th>
+                                <th>Quantidade</th>
+                                <th>Prioridade</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="producao-table-body">
+                            <tr>
+                                <td colspan="6" class="loading">
+                                    <div class="spinner"></div>
+                                    Carregando ordens...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modal Produto -->
+    <div id="modalProduto" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Novo Produto</h3>
+                <button class="close" onclick="closeModal('modalProduto')">&times;</button>
+            </div>
+            <form id="formProduto" onsubmit="salvarProduto(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nome">Nome *</label>
+                        <input type="text" id="nome" name="nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="codigoAnvisa">Código ANVISA</label>
+                        <input type="text" id="codigoAnvisa" name="codigoAnvisa" 
+                               pattern="[0-9]{1,13}" 
+                               title="Digite apenas números (máximo 13 dígitos)">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="unidade">Unidade *</label>
+                        <input type="text" id="unidade" name="unidade" required placeholder="Ex: Comprimido, Frasco, Caixa">
+                    </div>
+                    <div class="form-group">
+                        <label for="classeTerapeutica">Classe Terapêutica</label>
+                        <input type="text" id="classeTerapeutica" name="classeTerapeutica" placeholder="Ex: Analgésico, Antibiótico">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <textarea id="descricao" name="descricao" rows="4" placeholder="Descrição detalhada do produto..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modalProduto')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Lote -->
+    <div id="modalLote" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Novo Lote</h3>
+                <button class="close" onclick="closeModal('modalLote')">&times;</button>
+            </div>
+            <form id="formLote" onsubmit="salvarLote(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="loteNumero">Número do Lote *</label>
+                        <input type="text" id="loteNumero" name="numeroLote" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loteProduto">Produto *</label>
+                        <select id="loteProduto" name="produtoId" required>
+                            <option value="">Selecione...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="loteQuantidade">Quantidade *</label>
+                        <input type="number" id="loteQuantidade" name="quantidade" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loteFornecedor">Fornecedor</label>
+                        <input type="text" id="loteFornecedor" name="fornecedor">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="loteDataFabricacao">Data Fabricação *</label>
+                        <input type="date" id="loteDataFabricacao" name="dataFabricacao" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loteDataValidade">Data Validade *</label>
+                        <input type="date" id="loteDataValidade" name="dataValidade" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="loteNotaFiscal">Número da Nota Fiscal</label>
+                    <input type="text" id="loteNotaFiscal" name="numeroNotaFiscal">
+                </div>
+                <div class="form-group">
+                    <label for="loteObservacoes">Observações</label>
+                    <textarea id="loteObservacoes" name="observacoes" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modalLote')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Movimento -->
+    <div id="modalMovimento" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Registrar Movimento</h3>
+                <button class="close" onclick="closeModal('modalMovimento')">&times;</button>
+            </div>
+            <form id="formMovimento" onsubmit="salvarMovimento(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="movTipo">Tipo *</label>
+                        <select id="movTipo" name="tipo" required>
+                            <option value="ENTRADA">Entrada</option>
+                            <option value="SAIDA">Saída</option>
+                            <option value="AJUSTE">Ajuste</option>
+                            <option value="TRANSFERENCIA">Transferência</option>
+                            <option value="DEVOLUCAO">Devolução</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="movQuantidade">Quantidade *</label>
+                        <input type="number" id="movQuantidade" name="quantidade" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="movProduto">Produto *</label>
+                        <select id="movProduto" name="produtoId" required onchange="carregarLotesPorProduto(this.value)">
+                            <option value="">Selecione...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="movLote">Lote *</label>
+                        <select id="movLote" name="loteId" required>
+                            <option value="">Selecione o produto primeiro...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="movMotivo">Motivo *</label>
+                    <input type="text" id="movMotivo" name="motivo" required>
+                </div>
+                <div class="form-group">
+                    <label for="movObservacoes">Observações</label>
+                    <textarea id="movObservacoes" name="observacoes" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modalMovimento')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Inventário -->
+    <div id="modalInventario" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Novo Item de Inventário</h3>
+                <button class="close" onclick="closeModal('modalInventario')">&times;</button>
+            </div>
+            <form id="formInventario" onsubmit="salvarInventario(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="invProduto">Produto *</label>
+                        <select id="invProduto" name="produtoId" required onchange="carregarLotesPorProduto(this.value, 'invLote')">
+                            <option value="">Selecione...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="invLote">Lote *</label>
+                        <select id="invLote" name="loteId" required>
+                            <option value="">Selecione o produto primeiro...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="invLocalizacao">Localização *</label>
+                        <input type="text" id="invLocalizacao" name="localizacao" required placeholder="Ex: Prateleira A1">
+                    </div>
+                    <div class="form-group">
+                        <label for="invResponsavel">Responsável</label>
+                        <input type="text" id="invResponsavel" name="responsavel">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="invQuantidadeFisica">Quantidade Física *</label>
+                        <input type="number" id="invQuantidadeFisica" name="quantidadeFisica" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="invQuantidadeSistema">Quantidade Sistema *</label>
+                        <input type="number" id="invQuantidadeSistema" name="quantidadeSistema" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="invDataContagem">Data da Contagem *</label>
+                    <input type="datetime-local" id="invDataContagem" name="dataContagem" required>
+                </div>
+                <div class="form-group">
+                    <label for="invObservacoes">Observações</label>
+                    <textarea id="invObservacoes" name="observacoes" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modalInventario')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Ordem de Produção -->
+    <div id="modalOrdemProducao" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nova Ordem de Produção</h3>
+                <button class="close" onclick="closeModal('modalOrdemProducao')">&times;</button>
+            </div>
+            <form id="formOrdemProducao" onsubmit="salvarOrdemProducao(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="opNumero">Número da Ordem *</label>
+                        <input type="text" id="opNumero" name="numeroOrdem" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="opProduto">Produto *</label>
+                        <select id="opProduto" name="produtoId" required>
+                            <option value="">Selecione...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="opQuantidade">Quantidade Planejada *</label>
+                        <input type="number" id="opQuantidade" name="quantidadePlanejada" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="opPrioridade">Prioridade *</label>
+                        <select id="opPrioridade" name="prioridade" required>
+                            <option value="BAIXA">Baixa</option>
+                            <option value="MEDIA">Média</option>
+                            <option value="ALTA">Alta</option>
+                            <option value="URGENTE">Urgente</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="opDataInicio">Previsão de Início *</label>
+                        <input type="datetime-local" id="opDataInicio" name="dataPrevisaoInicio" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="opDataFim">Previsão de Fim *</label>
+                        <input type="datetime-local" id="opDataFim" name="dataPrevisaoFim" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="opObservacoes">Observações</label>
+                    <textarea id="opObservacoes" name="observacoes" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modalOrdemProducao')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="app.js?v=20250108"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Formulário Produto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        form {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #FDB913;
+            color: #333;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #e5a811;
+        }
+        #resultado {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .sucesso {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .erro {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐝 Teste - Cadastro de Produto</h1>
+    
+    <form id="formProduto" onsubmit="testarEnvio(event)">
+        <div class="form-group">
+            <label for="nome">Nome *</label>
+            <input type="text" id="nome" name="nome" required placeholder="Ex: Paracetamol 500mg">
+        </div>
+        
+        <div class="form-group">
+            <label for="codigoAnvisa">Código ANVISA</label>
+            <input type="text" id="codigoAnvisa" name="codigoAnvisa" placeholder="Ex: 1234567890123">
+        </div>
+        
+        <div class="form-group">
+            <label for="unidade">Unidade *</label>
+            <input type="text" id="unidade" name="unidade" required placeholder="Ex: Comprimido, Frasco, Caixa">
+        </div>
+        
+        <div class="form-group">
+            <label for="classeTerapeutica">Classe Terapêutica</label>
+            <input type="text" id="classeTerapeutica" name="classeTerapeutica" placeholder="Ex: Analgésico">
+        </div>
+        
+        <div class="form-group">
+            <label for="descricao">Descrição</label>
+            <textarea id="descricao" name="descricao" rows="4" placeholder="Descrição detalhada..."></textarea>
+        </div>
+        
+        <button type="submit">Cadastrar Produto</button>
+    </form>
+    
+    <div id="resultado"></div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8080/api';
+
+        async function testarEnvio(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            const produto = {
+                nome: formData.get('nome'),
+                descricao: formData.get('descricao') || null,
+                codigoAnvisa: formData.get('codigoAnvisa') || null,
+                unidade: formData.get('unidade'),
+                classeTerapeutica: formData.get('classeTerapeutica') || null
+            };
+            
+            console.log('=== DADOS CAPTURADOS DO FORMULÁRIO ===');
+            console.log('produto objeto:', produto);
+            console.log('JSON que será enviado:', JSON.stringify(produto, null, 2));
+            
+            const resultado = document.getElementById('resultado');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/produtos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(produto)
+                });
+                
+                console.log('Status da resposta:', response.status);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Produto criado:', data);
+                    resultado.className = 'sucesso';
+                    resultado.textContent = `✅ Produto cadastrado com sucesso! ID: ${data.id}`;
+                    resultado.style.display = 'block';
+                    form.reset();
+                } else {
+                    const errorData = await response.json();
+                    console.error('Erro do servidor:', errorData);
+                    resultado.className = 'erro';
+                    resultado.textContent = `❌ Erro: ${JSON.stringify(errorData, null, 2)}`;
+                    resultado.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                resultado.className = 'erro';
+                resultado.textContent = `❌ Erro na requisição: ${error.message}`;
+                resultado.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

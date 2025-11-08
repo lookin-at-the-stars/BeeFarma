@@ -30,5 +30,15 @@ services:
       SPRING_DATASOURCE_USERNAME: beepharma
       SPRING_DATASOURCE_PASSWORD: beepharma
 
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+
 volumes:
   mariadb_data:
