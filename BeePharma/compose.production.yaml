@@ -1,0 +1,59 @@
+services:
+  mariadb:
+    image: mariadb:10.11
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-beepharma_root_2024}
+      MARIADB_DATABASE: beepharma
+      MARIADB_USER: beepharma
+      MARIADB_PASSWORD: ${DB_PASSWORD:-beepharma_secure_2024}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    healthcheck:
+      test: ["CMD", "mariadb", "-h", "localhost", "-u", "root", "--password=${DB_ROOT_PASSWORD:-beepharma_root_2024}", "-e", "SELECT 1;"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - beepharma-network
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/beepharma
+      SPRING_DATASOURCE_USERNAME: beepharma
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-beepharma_secure_2024}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_JPA_SHOW_SQL: false
+      SPRING_FLYWAY_ENABLED: true
+    restart: unless-stopped
+    networks:
+      - beepharma-network
+
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+    networks:
+      - beepharma-network
+
+volumes:
+  mariadb_data:
+    driver: local
+
+networks:
+  beepharma-network:
+    driver: bridge
