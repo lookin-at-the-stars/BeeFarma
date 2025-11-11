@@ -12,10 +12,8 @@ import java.util.UUID;
 @Mapper(componentModel = "spring")
 public interface ProdutoMapper {
     
-    @Mapping(target = "id", source = "id")
     ProdutoDTO toDto(Produto entity);
     
-    @Mapping(target = "id", source = "id")
     @Mapping(target = "criadoEm", ignore = true)
     Produto toEntity(ProdutoDTO dto);
     

@@ -49,6 +49,8 @@ public class OrdemProducaoService {
     
     @Transactional
     public OrdemProducaoDTO criar(OrdemProducaoDTO dto) {
+        validarOrdemProducao(dto);
+        
         if (ordemProducaoRepository.existsByNumeroOP(dto.getNumeroOP())) {
             throw new IllegalArgumentException("Número de OP já cadastrado");
         }
@@ -74,6 +76,8 @@ public class OrdemProducaoService {
     
     @Transactional
     public OrdemProducaoDTO atualizar(String id, OrdemProducaoDTO dto) {
+        validarOrdemProducao(dto);
+        
         if (id == null) {
             throw new IllegalArgumentException("ID não pode ser nulo");
         }
@@ -83,6 +87,22 @@ public class OrdemProducaoService {
         }
         OrdemProducao op = ordemProducaoRepository.findById(uuid)
                 .orElseThrow(() -> new EntityNotFoundException("Ordem de Produção não encontrada"));
+        
+        // Validar se a OP pode ser editada baseado no status
+        if (op.getStatus() == OPStatus.CONCLUIDA) {
+            throw new IllegalArgumentException("Não é possível editar uma ordem de produção concluída");
+        }
+        
+        if (op.getStatus() == OPStatus.CANCELADA) {
+            throw new IllegalArgumentException("Não é possível editar uma ordem de produção cancelada");
+        }
+        
+        if (op.getStatus() == OPStatus.EM_ANDAMENTO) {
+            // Apenas permite editar datas e quantidades, não o número da OP ou produto
+            if (!dto.getNumeroOP().equals(op.getNumeroOP())) {
+                throw new IllegalArgumentException("Não é possível alterar o número de uma OP em andamento");
+            }
+        }
         
         if (!dto.getNumeroOP().equals(op.getNumeroOP()) 
                 && ordemProducaoRepository.existsByNumeroOP(dto.getNumeroOP())) {
@@ -109,5 +129,20 @@ public class OrdemProducaoService {
         op.setStatus(novoStatus);
         op = ordemProducaoRepository.save(op);
         return ordemProducaoMapper.toDto(op);
+    }
+    
+    private void validarOrdemProducao(OrdemProducaoDTO dto) {
+        if (dto.getNumeroOP() == null || dto.getNumeroOP().trim().isEmpty()) {
+            throw new IllegalArgumentException("Número da OP é obrigatório");
+        }
+        
+        if (dto.getQuantidadePlanejada() == null || dto.getQuantidadePlanejada().compareTo(java.math.BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Quantidade planejada deve ser maior que zero");
+        }
+        
+        if (dto.getDataInicio() != null && dto.getDataFimPrevista() != null 
+                && dto.getDataInicio().isAfter(dto.getDataFimPrevista())) {
+            throw new IllegalArgumentException("Data de início não pode ser posterior à data de fim prevista");
+        }
     }
 }

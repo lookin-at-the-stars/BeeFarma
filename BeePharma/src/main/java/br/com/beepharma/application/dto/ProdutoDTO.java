@@ -19,5 +19,8 @@ public class ProdutoDTO {
     @NotBlank(message = "Unidade é obrigatória")
     private String unidade;
     
+    @NotBlank(message = "Princípio ativo é obrigatório")
+    private String principioAtivo;
+    
     private String classeTerapeutica;
 }

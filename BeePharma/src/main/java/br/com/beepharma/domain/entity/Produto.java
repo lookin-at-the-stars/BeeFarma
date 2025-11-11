@@ -29,6 +29,9 @@ public class Produto {
     @Column(nullable = false)
     private String unidade;
     
+    @Column(name = "principio_ativo", nullable = false)
+    private String principioAtivo;
+    
     @Column(name = "classe_terapeutica")
     private String classeTerapeutica;
     

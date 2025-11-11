@@ -40,6 +40,8 @@ public class ProdutoService {
     
     @Transactional
     public ProdutoDTO criar(ProdutoDTO dto) {
+        validarProduto(dto);
+        
         if (dto.getCodigoAnvisa() != null && produtoRepository.existsByCodigoAnvisa(dto.getCodigoAnvisa())) {
             throw new IllegalArgumentException("Código ANVISA já cadastrado");
         }
@@ -51,6 +53,8 @@ public class ProdutoService {
     
     @Transactional
     public ProdutoDTO atualizar(String id, ProdutoDTO dto) {
+        validarProduto(dto);
+        
         if (id == null) {
             throw new IllegalArgumentException("ID não pode ser nulo");
         }
@@ -84,5 +88,19 @@ public class ProdutoService {
             throw new EntityNotFoundException("Produto não encontrado");
         }
         produtoRepository.deleteById(uuid);
+    }
+    
+    private void validarProduto(ProdutoDTO dto) {
+        if (dto.getNome() == null || dto.getNome().trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome do produto é obrigatório");
+        }
+        
+        if (dto.getDescricao() != null && dto.getDescricao().length() > 1000) {
+            throw new IllegalArgumentException("Descrição do produto não pode exceder 1000 caracteres");
+        }
+        
+        if (dto.getPrincipioAtivo() == null || dto.getPrincipioAtivo().trim().isEmpty()) {
+            throw new IllegalArgumentException("Princípio ativo é obrigatório");
+        }
     }
 }

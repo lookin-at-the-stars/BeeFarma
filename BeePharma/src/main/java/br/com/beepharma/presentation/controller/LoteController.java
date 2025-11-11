@@ -61,4 +61,18 @@ public class LoteController {
             @RequestParam LoteStatus status) {
         return ResponseEntity.ok(loteService.atualizarStatus(id, status));
     }
+    
+    @PostMapping("/{id}/aprovar")
+    @Operation(summary = "Aprovar lote", description = "Aprova um lote em quarentena, mudando seu status para APROVADO")
+    public ResponseEntity<LoteDTO> aprovarLote(@PathVariable String id) {
+        return ResponseEntity.ok(loteService.aprovarLote(id));
+    }
+    
+    @PostMapping("/{id}/reprovar")
+    @Operation(summary = "Reprovar lote", description = "Reprova um lote em quarentena, mudando seu status para REPROVADO")
+    public ResponseEntity<LoteDTO> reprovarLote(
+            @PathVariable String id,
+            @RequestParam(required = false) String motivo) {
+        return ResponseEntity.ok(loteService.reprovarLote(id, motivo));
+    }
 }
