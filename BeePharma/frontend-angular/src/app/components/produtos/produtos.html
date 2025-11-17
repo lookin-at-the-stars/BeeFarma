@@ -1,0 +1,108 @@
+<div class="produtos-page fade-in">
+  <div class="page-header">
+    <h2 class="page-title">
+      <span class="icon">📦</span>
+      Produtos
+    </h2>
+    <button class="btn btn-primary" (click)="openModal()">
+      <span>➕</span> Novo Produto
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Carregando produtos...</p>
+    </div>
+  } @else {
+    @if (produtos().length === 0) {
+      <div class="empty-state">
+        <span class="empty-icon">📦</span>
+        <h3>Nenhum produto cadastrado</h3>
+        <p>Clique em "Novo Produto" para começar</p>
+      </div>
+    } @else {
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Código ANVISA</th>
+              <th>Princípio Ativo</th>
+              <th>Classe Terapêutica</th>
+              <th>Unidade</th>
+              <th>Criado em</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (produto of produtos(); track produto.id) {
+              <tr>
+                <td><strong>{{ produto.nome }}</strong></td>
+                <td>{{ produto.codigoAnvisa || '-' }}</td>
+                <td>{{ produto.principioAtivo }}</td>
+                <td>{{ produto.classeTerapeutica || '-' }}</td>
+                <td>{{ produto.unidade }}</td>
+                <td>{{ formatDate(produto.criadoEm) }}</td>
+                <td class="action-buttons">
+                  <button class="btn btn-sm btn-primary" (click)="editProduto(produto)" title="Editar">✏️</button>
+                  <button class="btn btn-sm btn-danger" (click)="deleteProduto(produto.id!)" title="Excluir">🗑️</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</div>
+
+@if (showModal()) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ editMode() ? 'Editar Produto' : 'Novo Produto' }}</h3>
+        <button class="close-btn" (click)="closeModal()">&times;</button>
+      </div>
+      
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nome">Nome *</label>
+            <input type="text" id="nome" [(ngModel)]="formData().nome" name="nome" required />
+          </div>
+          <div class="form-group">
+            <label for="codigoAnvisa">Código ANVISA</label>
+            <input type="text" id="codigoAnvisa" [(ngModel)]="formData().codigoAnvisa" name="codigoAnvisa" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="principioAtivo">Princípio Ativo *</label>
+            <input type="text" id="principioAtivo" [(ngModel)]="formData().principioAtivo" name="principioAtivo" required />
+          </div>
+          <div class="form-group">
+            <label for="unidade">Unidade *</label>
+            <input type="text" id="unidade" [(ngModel)]="formData().unidade" name="unidade" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="classeTerapeutica">Classe Terapêutica</label>
+          <input type="text" id="classeTerapeutica" [(ngModel)]="formData().classeTerapeutica" name="classeTerapeutica" />
+        </div>
+
+        <div class="form-group">
+          <label for="descricao">Descrição</label>
+          <textarea id="descricao" [(ngModel)]="formData().descricao" name="descricao" rows="4"></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">{{ editMode() ? 'Atualizar' : 'Salvar' }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

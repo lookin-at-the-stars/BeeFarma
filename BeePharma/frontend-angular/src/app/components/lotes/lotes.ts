@@ -1,0 +1,1 @@
+import { Component } from "@angular/core"; import { CommonModule } from "@angular/common"; @Component({ selector: "app-lotes", imports: [CommonModule], templateUrl: "./lotes.html", styleUrl: "./lotes.scss" }) export class Lotes {}

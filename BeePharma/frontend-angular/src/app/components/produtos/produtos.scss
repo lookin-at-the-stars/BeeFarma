@@ -1,0 +1,142 @@
+.produtos-page {
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .page-title {
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-color);
+
+    .icon {
+      font-size: 2.5rem;
+    }
+  }
+
+  .loading-container,
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+
+    p, h3 {
+      margin-top: 1rem;
+      color: var(--text-secondary);
+    }
+
+    .empty-icon {
+      font-size: 5rem;
+      opacity: 0.3;
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s;
+}
+
+.modal-content {
+  background: white;
+  border-radius: var(--radius-md);
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.3s;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 2px solid var(--border-color);
+  background: linear-gradient(135deg, #FFD54F, #FFB300);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    color: white;
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+    line-height: 1;
+    transition: var(--transition);
+
+    &:hover {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+form {
+  padding: 1.5rem;
+
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--border-color);
+  }
+}
+
+@media (max-width: 768px) {
+  .produtos-page {
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  .modal-content {
+    width: 95%;
+    margin: 20px;
+  }
+}

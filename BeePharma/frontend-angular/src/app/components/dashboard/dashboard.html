@@ -1,0 +1,72 @@
+<div class="dashboard fade-in">
+  <h2 class="page-title">
+    <span class="icon">🍯</span>
+    Dashboard
+  </h2>
+
+  @if (loading()) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Carregando dados...</p>
+    </div>
+  } @else {
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon products">📦</div>
+        <div class="stat-info">
+          <h3>{{ stats().totalProdutos }}</h3>
+          <p>Produtos Cadastrados</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon batches">🏷️</div>
+        <div class="stat-info">
+          <h3>{{ stats().totalLotes }}</h3>
+          <p>Lotes Ativos</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon movements">📊</div>
+        <div class="stat-info">
+          <h3>{{ stats().totalMovimentos }}</h3>
+          <p>Movimentações</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon orders">⚙️</div>
+        <div class="stat-info">
+          <h3>{{ stats().totalOrdens }}</h3>
+          <p>Ordens de Produção</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="welcome-section">
+      <div class="card">
+        <h3>👋 Bem-vindo ao BeePharma!</h3>
+        <p>Sistema de Gestão Farmacêutica completo para controle de produtos, lotes, estoque e produção.</p>
+        <div class="features">
+          <div class="feature">
+            <span class="feature-icon">✅</span>
+            <span>Gestão de Produtos e Lotes</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✅</span>
+            <span>Controle de Estoque em Tempo Real</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✅</span>
+            <span>Ordens de Produção Inteligentes</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✅</span>
+            <span>Inventário e Rastreabilidade</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

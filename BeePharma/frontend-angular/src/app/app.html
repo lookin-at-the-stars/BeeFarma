@@ -1,0 +1,22 @@
+<header class="header">
+  <div class="container">
+    <div class="logo">
+      <span class="bee-icon">🐝</span>
+      <h1>BeePharma</h1>
+    </div>
+    <nav class="nav">
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/produtos" routerLinkActive="active">Produtos</a>
+      <a routerLink="/lotes" routerLinkActive="active">Lotes</a>
+      <a routerLink="/estoque" routerLinkActive="active">Estoque</a>
+      <a routerLink="/inventario" routerLinkActive="active">Inventário</a>
+      <a routerLink="/producao" routerLinkActive="active">Produção</a>
+    </nav>
+  </div>
+</header>
+
+<main class="main-content">
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</main>

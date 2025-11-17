@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>BeePharma - Sistema de Gestão Farmacêutica</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sistema de gestão farmacêutica completo para controle de produtos, lotes, estoque e produção.">
+  <meta name="theme-color" content="#FFB300">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+  <app-root>
+    <!-- Loading state enquanto o Angular carrega -->
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif;">
+      <div style="font-size: 4rem; animation: float 2s ease-in-out infinite;">🐝</div>
+      <h2 style="color: #FFB300; margin-top: 1rem;">BeePharma</h2>
+      <p style="color: #757575;">Carregando sistema...</p>
+      <div style="width: 40px; height: 40px; margin-top: 2rem; border: 4px solid #E0E0E0; border-top: 4px solid #FFB300; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+    </div>
+    <style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+    </style>
+  </app-root>
+</body>
+</html>
+

@@ -1,0 +1,1 @@
+import { Component } from "@angular/core"; import { CommonModule } from "@angular/common"; @Component({ selector: "app-producao", imports: [CommonModule], templateUrl: "./producao.html", styleUrl: "./producao.scss" }) export class Producao {}

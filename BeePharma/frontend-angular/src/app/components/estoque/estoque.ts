@@ -1,0 +1,1 @@
+import { Component } from "@angular/core"; import { CommonModule } from "@angular/common"; @Component({ selector: "app-estoque", imports: [CommonModule], templateUrl: "./estoque.html", styleUrl: "./estoque.scss" }) export class Estoque {}
